@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Информация для абитуриентов</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            background-color: #003366;
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .nav {
+            background-color: #004d99;
+            padding: 1rem;
+        }
+
+        .nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .nav li {
+            margin: 0 1rem;
+        }
+
+        .nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        .nav a:hover {
+            background-color: #0066cc;
+        }
+
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .feature-card {
+            border: 1px solid #ddd;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .important-info {
+            background-color: #f8f9fa;
+            padding: 2rem;
+            margin: 2rem 0;
+            border-radius: 8px;
+            border-left: 4px solid #003366;
+        }
+
+        .footer {
+            background-color: #003366;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            margin-top: 2rem;
+        }
+
+        .contact-info {
+            margin-top: 2rem;
+            padding: 1rem;
+            background-color: #e9ecef;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>Добро пожаловать, абитуриент!</h1>
+        <p>Ваш путь к успешному будущему начинается здесь</p>
+    </header>
+
+    <nav class="nav">
+        <ul>
+            <li><a href="/">Главная</a></li>
+            <li><a href="/cgi-bin/faculties.pl">Факультеты и кафедры</a></li>
+            <li><a href="#programs">Программы обучения</a></li>
+            <li><a href="#admission">Правила приёма</a></li>
+            <li><a href="#contacts">Контакты</a></li>
+        </ul>
+    </nav>
+
+    <div class="main-content">
+        <section class="important-info">
+            <h2>Важная информация</h2>
+            <p>Приём документов на 2024/2025 учебный год начинается с 20 июня 2024 года.</p>
+            <p>Не забудьте подготовить следующие документы:</p>
+            <ul>
+                <li>Паспорт и его копия</li>
+                <li>Аттестат о среднем образовании</li>
+                <li>4 фотографии 3x4</li>
+                <li>Результаты ЕГЭ</li>
+            </ul>
+        </section>
+
+        <div class="features">
+            <div class="feature-card">
+                <h3>Современное образование</h3>
+                <p>Наш университет предлагает современные образовательные программы, разработанные совместно с ведущими компаниями.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Перспективы карьеры</h3>
+                <p>85% наших выпускников находят работу по специальности в течение первого года после окончания обучения.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Студенческая жизнь</h3>
+                <p>Активная внеучебная деятельность, спортивные секции, творческие студии и научные кружки.</p>
+            </div>
+        </div>
+
+        <section id="programs">
+            <h2>Программы обучения</h2>
+            <p>Мы предлагаем различные формы обучения:</p>
+            <ul>
+                <li>Бакалавриат (4 года)</li>
+                <li>Магистратура (2 года)</li>
+                <li>Специалитет (5-6 лет)</li>
+                <li>Аспирантура</li>
+            </ul>
+        </section>
+
+        <section id="admission">
+            <h2>Правила приёма</h2>
+            <p>Для поступления необходимо:</p>
+            <ol>
+                <li>Подать документы в приёмную комиссию</li>
+                <li>Пройти вступительные испытания (если требуется)</li>
+                <li>Дождаться результатов конкурсного отбора</li>
+                <li>Заключить договор на обучение (для платной формы)</li>
+            </ol>
+        </section>
+
+        <section id="contacts" class="contact-info">
+            <h2>Контактная информация</h2>
+            <p><strong>Приёмная комиссия:</strong></p>
+            <p>Телефон: +7 (XXX) XXX-XX-XX</p>
+            <p>Email: admission@university.ru</p>
+            <p>Адрес: г. Город, ул. Университетская, д. 1</p>
+            <p>Время работы: Пн-Пт с 9:00 до 18:00</p>
+        </section>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2024 Университет. Все права защищены.</p>
+        <p>Лицензия на осуществление образовательной деятельности № XXX от XX.XX.XXXX</p>
+    </footer>
+</body>
+</html> 
