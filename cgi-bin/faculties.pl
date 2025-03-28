@@ -34,13 +34,8 @@ if ($cgi->param('action') && $cgi->param('action') eq 'get_departments') {
     my $faculty_id = $cgi->param('faculty_id');
     my $departments = get_departments($dbh, $faculty_id);
     
-    # Явно декодируем все строки из UTF-8
-    for my $dept (@$departments) {
-        $dept->{name} = decode('UTF-8', $dept->{name}) unless utf8::is_utf8($dept->{name});
-        $dept->{description} = decode('UTF-8', $dept->{description}) if $dept->{description} && !utf8::is_utf8($dept->{description});
-    }
-    
-    my $json = JSON->new->utf8->encode($departments);
+    # Используем простое кодирование в JSON
+    my $json = JSON->new->encode($departments);
     
     print $cgi->header(
         -type => 'application/json',
@@ -170,43 +165,56 @@ print <<HTML;
             margin: 0;
             color: #666;
         }
+
+        .department h4 a {
+            color: #004d99;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .department h4 a:hover {
+            color: #0066cc;
+            text-decoration: underline;
+        }
     </style>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-    \$(document).ready(function() {
+    jQuery(document).ready(function(\$) {
         \$('.faculty-header').click(function() {
-            const facultyId = \$(this).data('faculty-id');
-            const departmentsDiv = \$('#departments-' + facultyId);
+            var facultyId = \$(this).data('faculty-id');
+            var departmentsDiv = \$('#departments-' + facultyId);
             
             if (departmentsDiv.is(':empty')) {
                 \$.ajax({
                     url: '/cgi-bin/faculties.pl',
+                    method: 'GET',
                     data: {
                         action: 'get_departments',
                         faculty_id: facultyId
                     },
                     dataType: 'json',
-                    contentType: 'application/json; charset=utf-8',
                     success: function(departments) {
-                        let html = '<div class="departments-list">';
-                        departments.forEach(function(dept) {
-                            // Декодируем строки из UTF-8
-                            const name = decodeURIComponent(escape(dept.name));
-                            const description = dept.description ? decodeURIComponent(escape(dept.description)) : '';
+                        var html = '<div class="departments-list">';
+                        for (var i = 0; i < departments.length; i++) {
+                            var dept_name = departments[i].name;
+                            var dept_id = departments[i].id;
+                            var dept_description = departments[i].description || '';
                             
                             html += '<div class="department">';
-                            html += '<h4>' + name + '</h4>';
-                            if (description) {
-                                html += '<p>' + description + '</p>';
+                            html += '<h4><a href="/cgi-bin/department.pl?id=' + dept_id + '">' + 
+                                    decodeURIComponent(dept_name) + '</a></h4>';
+                            if (dept_description) {
+                                html += '<p>' + decodeURIComponent(dept_description) + '</p>';
                             }
                             html += '</div>';
-                        });
+                        }
                         html += '</div>';
                         departmentsDiv.html(html).slideDown();
                     },
                     error: function(xhr, status, error) {
                         console.error('Error:', error);
                         console.log('Response:', xhr.responseText);
+                        departmentsDiv.html('<p>Ошибка загрузки данных</p>').slideDown();
                     }
                 });
             } else {
@@ -226,7 +234,7 @@ print <<HTML;
         <ul>
             <li><a href="/">Главная</a></li>
             <li><a href="/cgi-bin/faculties.pl">Факультеты и кафедры</a></li>
-            <li><a href="/#programs">Программы обучения</a></li>
+            <li><a href="/cgi-bin/tender_statistics.pl">Конкурсный отбор</a></li>
             <li><a href="/#admission">Правила приёма</a></li>
             <li><a href="/#contacts">Контакты</a></li>
         </ul>
@@ -277,7 +285,7 @@ sub get_departments {
     my $sth = $dbh->prepare(q{
         SELECT id, name, short_name, description
         FROM departments
-        WHERE faculty_id = ?
+        WHERE facultiesid = ?
         ORDER BY name
     });
     $sth->execute($faculty_id);

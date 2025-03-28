@@ -23,45 +23,73 @@ sub init {
     my $dbh = $self->connect;
     
     $dbh->do(q{
-        CREATE TABLE IF NOT EXISTS users (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            username TEXT UNIQUE NOT NULL,
-            password TEXT NOT NULL,
-            email TEXT UNIQUE NOT NULL,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )
-    });
-    
-    $dbh->do(q{
-        CREATE TABLE IF NOT EXISTS pages (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            title TEXT NOT NULL,
-            content TEXT NOT NULL,
-            slug TEXT UNIQUE NOT NULL,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )
-    });
-    
-    $dbh->do(q{
         CREATE TABLE IF NOT EXISTS faculties (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT NOT NULL,
-            short_name TEXT NOT NULL,
-            description TEXT,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            name VARCHAR(50) NOT NULL UNIQUE,
+            short_name VARCHAR(15) NOT NULL,
+            description VARCHAR(255)
         )
     });
     
     $dbh->do(q{
         CREATE TABLE IF NOT EXISTS departments (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            faculty_id INTEGER NOT NULL,
-            name TEXT NOT NULL,
-            short_name TEXT NOT NULL,
-            description TEXT,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY (faculty_id) REFERENCES faculties(id)
+            name VARCHAR(50) NOT NULL,
+            short_name VARCHAR(15) NOT NULL,
+            description VARCHAR(255),
+            facultiesid INTEGER(10) NOT NULL,
+            FOREIGN KEY (facultiesid) REFERENCES faculties(id)
+        )
+    });
+    
+    $dbh->do(q{
+        CREATE TABLE IF NOT EXISTS specialties (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            departmentsid INTEGER(10) NOT NULL,
+            name VARCHAR(50) NOT NULL,
+            code VARCHAR(20) NOT NULL,
+            level_education VARCHAR(15) NOT NULL,
+            form_education INTEGER(10) NOT NULL,
+            budget_places INTEGER(4),
+            paid_places INTEGER(10),
+            passing_score INTEGER(3),
+            description INTEGER(10),
+            FOREIGN KEY (departmentsid) REFERENCES departments(id)
+        )
+    });
+    
+    $dbh->do(q{
+        CREATE TABLE IF NOT EXISTS exam_variants (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            task BLOB NOT NULL,
+            specialtiesid INTEGER(10) NOT NULL,
+            FOREIGN KEY (specialtiesid) REFERENCES specialties(id)
+        )
+    });
+    
+    $dbh->do(q{
+        CREATE TABLE IF NOT EXISTS applicant (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name VARCHAR(50) NOT NULL,
+            surname VARCHAR(50) NOT NULL,
+            patronymic VARCHAR(50),
+            birth_date TIMESTAMP NOT NULL,
+            email VARCHAR(60) UNIQUE NOT NULL,
+            phone_number VARCHAR(12) UNIQUE NOT NULL,
+            series_number_passport VARCHAR(15) UNIQUE NOT NULL
+        )
+    });
+    
+    $dbh->do(q{
+        CREATE TABLE IF NOT EXISTS application (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            specialtiesid INTEGER(10) NOT NULL,
+            applicantid INTEGER(10) NOT NULL,
+            creation_time TIMESTAMP NOT NULL,
+            status VARCHAR(40) NOT NULL, 
+            update_time INTEGER(10) NOT NULL,
+            FOREIGN KEY (specialtiesid) REFERENCES specialties(id),
+            FOREIGN KEY (applicantid) REFERENCES applicant(id)
         )
     });
     

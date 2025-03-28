@@ -22,12 +22,19 @@ eval {
     # Отключаем проверку внешних ключей для удаления
     $dbh->do('PRAGMA foreign_keys = OFF');
     
-    # Очищаем таблицы
+    # Очищаем таблицы (порядок важен из-за зависимостей)
+    $dbh->do('DELETE FROM application');
+    $dbh->do('DELETE FROM exam_variants');
+    $dbh->do('DELETE FROM tender_statistics');
+    $dbh->do('DELETE FROM applicant');
+    $dbh->do('DELETE FROM specialties');
     $dbh->do('DELETE FROM departments');
     $dbh->do('DELETE FROM faculties');
     
     # Сбрасываем автоинкремент
-    $dbh->do('DELETE FROM sqlite_sequence WHERE name IN ("departments", "faculties")');
+    $dbh->do('DELETE FROM sqlite_sequence WHERE name IN 
+        ("application", "exam_variants", "tender_statistics", 
+         "applicant", "specialties", "departments", "faculties")');
     
     # Включаем обратно проверку внешних ключей
     $dbh->do('PRAGMA foreign_keys = ON');
